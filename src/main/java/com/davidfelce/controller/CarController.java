@@ -27,11 +27,12 @@ public class CarController {
 
     @RequestMapping("/list")
     public void carList(Model model) {
-        List<Car> carList = carService.findAll();
+//        List<Car> carList = carService.findAll();
+        List<Car> carList = carDAO.findAll();
         model.addAttribute("carList", carList);
     }
 
-    @RequestMapping("/dao_list")
+    @RequestMapping("/first")
     public void daoCarList() {
         Car car = carDAO.findById(1);
         System.out.println(car.getName());

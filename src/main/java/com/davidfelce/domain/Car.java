@@ -29,7 +29,6 @@ public class Car {
     @Min(100) @Max(1000000)
     private BigDecimal price;
 
-    @NotEmpty
     private int id;
 
     public int getId() {

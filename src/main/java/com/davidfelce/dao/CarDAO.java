@@ -2,12 +2,14 @@ package com.davidfelce.dao;
 
 import com.davidfelce.domain.Car;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 public class CarDAO {
@@ -26,19 +28,29 @@ public class CarDAO {
 
     public Car findById(int id) {
         String sql = "select * from car where id=?";
-        Car car = jdbcTemplate.queryForObject(sql, new Object[]{id}, new CarMapper());
+        Car car = jdbcTemplate.queryForObject(sql, new Object[]{id}, BeanPropertyRowMapper.newInstance((Car.class)));
         return car;
     }
 
-    private class CarMapper implements RowMapper<Car> {
-        public Car mapRow(ResultSet row, int rowNum) throws SQLException {
-            Car car = new Car();
+    public List<Car> findAll() {
+        String sql = "select * from car";
 
-            car.setId(row.getInt("id"));
-            car.setName(row.getString("name"));
-            car.setPrice(row.getBigDecimal("price"));
+        List<Car> carList = jdbcTemplate.query(
+                sql,
+                new BeanPropertyRowMapper(Car.class));
 
-            return car;
-        }
+        return carList;
     }
+
+//    private class CarMapper implements RowMapper<Car> {
+//        public Car mapRow(ResultSet row, int rowNum) throws SQLException {
+//            Car car = new Car();
+//
+//            car.setId(row.getInt("id"));
+//            car.setName(row.getString("name"));
+//            car.setPrice(row.getBigDecimal("price"));
+//
+//            return car;
+//        }
+//    }
 }
