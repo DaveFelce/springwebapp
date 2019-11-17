@@ -3,3 +3,4 @@ CREATE TABLE car (
     name   varchar(200),
     price  integer
 );
+
