@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,19 @@ public class CarDAO {
     public void add(Car car) {
         String sql = "insert into car (name, price) values (?, ?)";
         jdbcTemplate.update(sql, car.getName(), car.getPrice());
+    }
+
+    public void update(Car car) {
+        String sql = "update car set name=?, price=? where id=?";
+        jdbcTemplate.update(sql, car.getName(), car.getPrice(),car.getId());
+    }
+
+    public void save(Car car) {
+        if (car.getId() == 0) {
+            add(car);
+        } else {
+            update(car);
+        }
     }
 
     public Car findById(int id) {
@@ -90,6 +104,18 @@ public class CarDAO {
             return ll;
         }
     }
+
+    public void addList(List<Car> carList) {
+        String sql = "insert into car(name, price) values (?, ?)";
+
+        List<Object[]> carRows = new ArrayList<>();
+        for (Car car : carList) {
+            carRows.add(new Object[] {car.getName(), car.getPrice()});
+        }
+
+        jdbcTemplate.batchUpdate(sql, carRows);
+    }
+
 //    private class CarMapper implements RowMapper<Car> {
 //        public Car mapRow(ResultSet row, int rowNum) throws SQLException {
 //            Car car = new Car();

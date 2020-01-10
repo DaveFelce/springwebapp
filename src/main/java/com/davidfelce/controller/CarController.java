@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.util.LinkedList;
 import java.util.List;
 
 @Controller
@@ -64,7 +66,24 @@ public class CarController {
 
         // validation was successful
 //        carService.add(car);
-        carDAO.add(car);
+        carDAO.save(car);
         return "redirect:/car/list";
+    }
+
+    @RequestMapping("add_car_list")
+    public void addCarList() {
+        List<Car> carList = new LinkedList<Car>();
+
+        Car car1 = new Car();
+        car1.setName("Merlin");
+        car1.setPrice(BigDecimal.valueOf(888));
+        carList.add(car1);
+
+        Car car2 = new Car();
+        car2.setName("Arthur");
+        car2.setPrice(BigDecimal.valueOf(777));
+        carList.add(car2);
+
+        carDAO.addList(carList);
     }
 }
